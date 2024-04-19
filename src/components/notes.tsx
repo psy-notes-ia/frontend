@@ -28,16 +28,19 @@ import {
   TabsTrigger,
 } from "@/registry/new-york/ui/tabs";
 import { TooltipProvider } from "@/registry/new-york/ui/tooltip";
-import { useMail } from "@/app/use-mail";
-import { MailDisplay } from "./notes-display";
-import { MailList } from "./notes-list";
+import { useMail } from "@/utils/use-mail";
+import { NoteDisplay } from "./notes-display";
+import { NoteList } from "./notes-list";
 import { Nav } from "./nav";
-import { Mail } from "@/app/data";
+import { Mail } from "@/utils/data";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/registry/new-york/ui/button";
 
 import NewNoteDrawer from "./new-note";
 import { NewAnalyse } from "./new-analyse";
+import { NewNoteDisplay } from "./new-notes-display";
+import NoteService from "@/app/api/repository/NoteService";
+import { AnalysesList } from "./analyses-list";
 // import { AccountSwitcher } from "@/app/(app)/examples/mail/components/account-switcher"
 // import { MailDisplay } from "@/app/(app)/examples/mail/components/mail-display"
 // import { MailList } from "@/app/(app)/examples/mail/components/mail-list"
@@ -67,6 +70,7 @@ export function Mail({
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
 
   const [isAnalyse, setAnlyseMode] = React.useState(false);
+  const [newNote, setNewNote] = React.useState(false);
 
   const changeAnlyseMode = () => setAnlyseMode((prev) => !prev);
   const allLinks: {
@@ -109,13 +113,45 @@ export function Mail({
       variant: "default" | "ghost";
     }[]
   >(allLinks);
-  const [mail] = useMail();
+  const [mail, setMail] = useMail();
 
   const params = useSearchParams();
+  const [notes, setNotes] = React.useState<any[]>([]);
 
-  if (params.get("p") == null) {
-    location.replace("?p=all");
-  }
+  const loadNotes = (id?: string) => {
+    const p = params.get("p");
+
+    var _id = "";
+
+    if (id != undefined) {
+      _id = id;
+    } else if (p != "all" && p != null) {
+      _id = p;
+    }
+
+    if (_id != "") {
+      console.log("LOAD NOTES/.....");
+      NoteService.fetchAllNotes(_id).then(async (value) => {
+        var res = await value.json();
+        if (res != null) {
+          setNotes(res);
+        }
+      });
+    }
+  };
+
+  React.useEffect(() => {
+    loadNotes();
+  }, []);
+
+  React.useEffect(() => {
+    if (location && params.get("p") == null) location.assign("?p=all");
+  });
+  const onClickedNavItens = (id?: string) => {
+    setMail({ ...mail, selected: null });
+    loadNotes(id);
+    console.log();
+  };
   return (
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup
@@ -140,7 +176,7 @@ export function Mail({
           //   )}`
           // }}
 
-          className={"w-[250px] transition-all duration-300 ease-in-out"}
+          className={"w-[260px] transition-all duration-300 ease-in-out"}
         >
           <div
             className={cn(
@@ -152,6 +188,7 @@ export function Mail({
           <Nav
             isCollapsed={isCollapsed}
             links={links}
+            onClickItems={(id?: string) => onClickedNavItens(id)}
             onSearchPacient={(e) => {
               if (e != "") {
                 var _links = links.filter((l) => l.title.startsWith(e));
@@ -208,12 +245,12 @@ export function Mail({
                     </Button>
                   </NewAnalyse>
                 ) : (
-                  <NewNoteDrawer>
-                    <Button>
-                      <FilePlus2 className="h-4 w-4 mr-2" />
-                      Nova anotação
-                    </Button>
-                  </NewNoteDrawer>
+                  // <NewNoteDrawer>
+                  <Button onClick={() => setNewNote((prev) => !prev)}>
+                    <FilePlus2 className="h-4 w-4 mr-2" />
+                    Nova anotação
+                  </Button>
+                  // </NewNoteDrawer>
                 )}
                 {/* <NewNoteDrawer>
                   <Button>
@@ -225,19 +262,13 @@ export function Mail({
             )}
             <TabsContent value="all" className="m-0">
               {params.get("p") != "all" ? (
-                <MailList
-                  items={mails.filter((item) =>
-                    params.get("p") != "all"
-                      ? item.uid == params.get("p")
-                      : true
-                  )}
-                />
+                <NoteList items={notes} />
               ) : (
                 <AllPacients />
               )}
             </TabsContent>
             <TabsContent value="unread" className="m-0">
-              <MailList items={mails.filter((item) => !item.read)} />
+              <AnalysesList items={notes} />
             </TabsContent>
           </Tabs>
           {/* <AllPacients /> */}
@@ -246,9 +277,14 @@ export function Mail({
 
         {params.get("p") != "all" && (
           <ResizablePanel defaultSize={defaultLayout[2]}>
-            <MailDisplay
-              mail={mails.find((item) => item.id === mail.selected) || null}
-            />
+            {newNote ? (
+              <NewNoteDisplay onCancel={() => setNewNote((prev) => !prev)} onSubmited={loadNotes}/>
+            ) : (
+              <NoteDisplay
+              onNoteDeleted={loadNotes}
+                note={notes.find((item) => item.id === mail.selected) || null}
+              />
+            )}
           </ResizablePanel>
         )}
       </ResizablePanelGroup>

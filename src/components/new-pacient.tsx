@@ -12,8 +12,18 @@ import { Label } from "@/registry/new-york/ui/label";
 import { Button } from "@/registry/new-york/ui/button";
 import { Input } from "@/registry/new-york/ui/input";
 import { Copy } from "lucide-react";
+import { useState } from "react";
+import PacientService from "@/app/api/repository/PacientService";
 
-export function NewPacient({ children }: any) {
+export function NewPacient({ children, onSubmited }: any) {
+  const [name, setName] = useState("");
+  const onSubmit = async () => {
+    const res = await PacientService.createOne({ name });
+
+    if (res.status === 201) {
+      onSubmited();
+    }
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -27,7 +37,12 @@ export function NewPacient({ children }: any) {
         <div className="flex items-center space-x-2">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="email">Nome do paciente</Label>
-            <Input type="text" id="email" placeholder="Ex. Sarah Martins" />
+            <Input
+              type="text"
+              id="email"
+              placeholder="Ex. Sarah Martins"
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
         </div>
         <DialogFooter className="sm:justify-end mt-4">
@@ -36,7 +51,11 @@ export function NewPacient({ children }: any) {
               Cancelar
             </Button>
           </DialogClose>
-          <Button type="button">Salvar</Button>
+          <DialogClose asChild>
+            <Button type="button" onClick={onSubmit}>
+              Salvar
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -144,15 +144,16 @@ export default function MultiSelectComponent({
         options={iceCreamFlavors}
         value={values}
         onChange={handleMultiSelectChange}
-        placeholder="Selecione 1 ou mais"
+        placeholder="Selecione até 5"
         styles={customStyles}
+        isDisabled={values.length == 5}
         isMulti
         formatOptionLabel={formatOptionLabel}
         noOptionsMessage={() => "Anotação não encontrada"}
       />
       {values.length > 0 && (
         <div className="">
-          You selected: {values.map((option: any) => option.label).join(", ")}
+          Anotações a serem analisadas: {values.map((option: any) => option.label).join(", ")}
         </div>
       )}
     </>

@@ -1,0 +1,97 @@
+{
+  "confirm-modal": {
+    "title": "Do you really want to close the form?",
+    "description": "Once closed, it cannot be reopened.",
+    "cancel-button": "Cancel",
+    "confirm-button": "Close Form"
+  },
+  "payment-issue-modal": {
+    "title": "There was an issue with your payment",
+    "p": "The recent charge to your payment method was unsuccessful. Please check your information or provide a new payment method to avoid service suspension.",
+    "description": "Click 'Update Payment' to resolve this issue",
+    "button": "Update Payment"
+  },
+  "password-modal": {
+    "title": "Confirm your account",
+    "input": {
+      "label": "Enter your password",
+      "placeholder": "Your password should have 8 or more characters"
+    },
+    "button": "Confirm"
+  },
+  "profile-modal": {
+    "button": "Change"
+  },
+  "share-modal": {
+    "button": "Download",
+    "span": "Use the qr-code or copy and send the link! ;)",
+    "snippet": "Link to the form"
+  },
+  "pricing-modal": {
+    "title": "Oops! Limit reached! Time to upgrade your plan... ;)",
+    "description": "Enjoy a universe of possibilities",
+    "option": {
+      "monthly": "Monthly",
+      "semester": "Semiannually"
+    },
+    "semester":"Semiannually",
+    "choose":"Choose",
+    "by-month":"by month",
+    "current-plan":"Current plan",
+    "link": "Need more? Contact us"
+  },
+
+  "create-form": {
+    "title": "New SmartForm",
+    "custom-elements":{"name":"name","sex":"sex","email":"email"},
+    "inputs": {
+      "title": {
+        "label": "Title",
+        "placeholder": "Enter a title for the form."
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Describe the purpose of the form, what you expect to discover with the responses."
+      },
+      "max_q": {
+        "label": "Maximum number of questions to be generated:",
+        "placeholder": "Select one"
+      },
+      "type":{
+        "label": "What type of form do you want to use?",
+        "placeholder":"Select"
+      }
+    },
+    "form-options": {
+      "general": {
+        "name": "General",
+        "description": "Collect varied responses, focusing on the established purpose."
+      },
+      "nps": {
+        "name": "NPS",
+        "description": "Net Promoter Score - evaluate customer satisfaction and loyalty"
+      },
+      "quality": {
+        "name": "Quality",
+        "description": "Focus on business quality (structure, service...)"
+      },
+      "service": {
+        "name": "Service",
+        "description": "Focus on customer service"
+      },
+      "exp": {
+        "name": "Experience",
+        "description": "Focus on the customer's experience with your business"
+      },
+      "product": {
+        "name": "Product",
+        "description": "Collect responses about your products"
+      }
+    },
+    "error": "Failed to create the form, please try again later.",
+    "footer": {
+      "cancel-button": "Cancel",
+      "submit-button": "Generate smartform"
+    }
+  }
+}

@@ -16,7 +16,7 @@ interface MailListProps {
   items: any[];
 }
 
-export function NoteList({ items }: MailListProps) {
+export function AnalysesList({ items }: MailListProps) {
   const [mail, setMail] = useMail();
 
   return (
@@ -39,10 +39,7 @@ export function NoteList({ items }: MailListProps) {
             <div className="flex w-full flex-col gap-1">
               <div className="flex items-center">
                 <div className="flex items-center gap-2">
-                  <div className="font-semibold capitalize flex items-center">
-                    <span className="flex h-[6px] w-[6px] rounded-full bg-blue-600 mr-1" />
-                    {item.title}
-                  </div>
+                  <div className="font-semibold">{item.title}</div>
                   {/* {!item.read && (
                     <span className="flex h-2 w-2 rounded-full bg-blue-600" />
                   )} */}
@@ -58,16 +55,16 @@ export function NoteList({ items }: MailListProps) {
                   {/* {formatDistanceToNow(new Date(item.date), {
                     addSuffix: true,
                   })} */}
-                  {format(item.session, "PPP", { locale: ptBR })}
+                  4d
                 </div>
               </div>
-              {/* <div className="text-xs font-medium flex items-center">
+              <div className="text-xs font-medium flex items-center">
                 {" "}
                 <span className="flex h-1 w-1 rounded-full bg-blue-600 mr-1" />
                 {format(item.session, "PPP", { locale: ptBR })}
-              </div> */}
+              </div>
             </div>
-            <div className="line-clamp-2 mb-1 text-xs text-muted-foreground">
+            <div className="line-clamp-2 text-xs text-muted-foreground">
               {item.summary}
             </div>
             {item.tags.length ? (
@@ -96,8 +93,8 @@ function getBadgeVariantFromLabel(
   // }
 
   // if (i % 2 == 0) {
-  return "outline";
+    // return "outline";
   // }
-  // return "default";
+  return "default";
   // return "secondary"
 }

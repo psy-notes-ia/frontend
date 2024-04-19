@@ -1,0 +1,72 @@
+{
+  "header": {
+    "my-info": "My info",
+    "sign-out": "Sign out"
+  },
+  "home": {
+    "title": "Get started now",
+    "description": "Click the button at the bottom to create a new form.",
+    "search": {
+      "label": "Search for a smartform",
+      "placeholder": "Enter at least 3 characters..."
+    },
+    "button": "Create form"
+  },
+  "home-details": {
+    "answers": "Answers",
+    "finished": "Finished",
+    "buttons": {
+      "share": "Share",
+      "actions": "Actions",
+      "pause": "Pause form",
+      "stop": "Close form",
+      "open": "Open form"
+    },
+    "cards": {
+      "answers": {
+        "title": "Answers"
+      },
+      "range": {
+        "title": "Range",
+        "span": "people",
+        "description": "Total number of people exposed to the questionnaire."
+      }
+    },
+    "tabs": {
+      "analyse": {
+        "title": "Analysis",
+        "insight": "Insights",
+        "keywords": "Keywords",
+        "result": "Conclusion",
+        "empty-state": {
+          "title": "You haven't analyzed the answers yet!",
+          "description": "Click the button below to analyze all the answers",
+          "button": "Start analysis"
+        },
+        "loading-state": {
+          "title": "All answers are being analyzed!",
+          "description": "This may take a while..."
+        },
+        "unavailable-state": {
+          "title": "Upgrade now!",
+          "description": "Upgrade your plan and get a complete analysis with artificial intelligence",
+          "button": "Upgrade now"
+        },
+        "blocked-state": {
+          "title": "Wait for answers!",
+          "description": "To start analyzing the answers, you must close the form."
+        }
+      },
+      "questions": {
+        "title": "Questions"
+      },
+      "answers": {
+        "title": "Latest answers",
+        "empty-state": {
+          "title": "No answers added",
+          "description": "Share your form to get answers!"
+        }
+      }
+    }
+  }
+}

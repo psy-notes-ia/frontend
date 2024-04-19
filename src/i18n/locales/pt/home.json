@@ -1,0 +1,72 @@
+{
+  "header": {
+    "my-info":"Meus dados",
+    "sign-out":"Sair"
+  },
+  "home": {
+    "title": "Comece agora",
+    "description": "Clique no botão na parte inferior para criar um novo formulário.",
+    "search":{
+        "label":"Pesquise um smartform",
+        "placeholder":"Digite pelo menos 3 caracteres..."
+    },
+    "button":"Criar formulário"
+  },
+  "home-details": {
+    "answers": "Respostas",
+    "finished": "Finalizado",
+    "buttons": {
+      "share": "Compartilhar",
+      "actions": "Ações",
+      "pause": "Pausar formulário",
+      "stop": "Fechar formulário",
+      "open": "Abrir formulário"
+    },
+    "cards": {
+      "answers": {
+        "title": "Respostas"
+      },
+      "range": {
+        "title": "Alcance",
+        "span": "pessoas",
+        "description": "Número total de pessoas expostas ao questionário."
+      }
+    },
+    "tabs": {
+      "analyse": {
+        "title": "Análise",
+        "insight":"Insights",
+        "keywords":"Palavras chave",
+        "result":"Conclusão",
+        "empty-state":{
+            "title":"Você ainda não analisou as respostas!",
+            "description":"Clique no botão abaixo para analisar todas as respostas",
+            "button":"Iniciar analise"
+        },
+        "loading-state":{
+            "title":"Todas as resposas estão sendo analisadas!",
+            "description":"Isso pode levar um tempinho..."
+        },
+        "unavailable-state":{
+            "title":"Faça um upgrade!",
+            "description":"Atualize seu plano e obtenha uma analise completa com inteligencia artificial",
+            "button":"Atualizar agora"
+        },
+        "blocked-state":{
+            "title":"Aguarde as respostas!",
+            "description":"Para inciar a analise das respostas você deve fechar o formulário."
+        }
+      },
+      "questions": {
+        "title": "Questões"
+      },
+      "answers": {
+        "title": "Ultimas respostas",
+        "empty-state":{
+            "title":"Nenhuma resposta adicionada",
+            "description":"Compartilhe seu formulário para obter respostas!"
+        }
+      }
+    }
+  }
+}

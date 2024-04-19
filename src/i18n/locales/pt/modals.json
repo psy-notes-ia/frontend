@@ -1,0 +1,98 @@
+{
+  "confirm-modal": {
+    "title": "Deseja realmente fechar o formulário?",
+    "description": "Após fechado ele não poderá ser aberto novamente.",
+    "cancel-button": "Cancelar",
+    "confirm-button": "Fechar Formulário"
+  },
+  "payment-issue-modal": {
+    "title": "Houve um problema com seu pagamento",
+    "description": "A cobrança recente do seu método de pagamento não foi bem-sucedida. Verifique suas informações ou forneça um novo método de pagamento para evitar a suspensão dos serviços.",
+    "p": "Clique em 'Atualizar pagamento' para resolver este problema",
+    "button": "Atualizar pagamento"
+  },
+  "password-modal": {
+    "title": "Confirme sua conta",
+    "input": {
+      "label": "Digite sua senha",
+      "placeholder": "Sua senha possui 8 ou mais caracteres"
+    },
+    "button": "Concluir"
+  },
+  "profile-modal": {
+    "button": "Alterar"
+  },
+  "share-modal": {
+    "button": "Download",
+    "span": "Use o qr-code ou copie e envie o link! ;)",
+    "snippet": "Link para o formulario"
+  },
+  "pricing-modal": {
+    "title": "Ops! Limite alcançado! Hora de dar um upgrade no plano... ; )",
+    "description": "Aproveite um universo de possibilidades",
+    "option": {
+      "monthly": "Mensal",
+      "semester": "Semestral"
+    },
+    "semester":"Semestralmente",
+    "choose":"Escolher",
+    "current-plan":"Plano atual",
+    "by-month":"por mês",
+
+    "link": "Precisa de mais? Entre em contato conosco"
+  },
+
+  "create-form": {
+    "title": "Novo SmartForm",
+    "custom-elements":{"name":"nome","sex":"sexo","email":"email"},
+    "inputs": {
+      "title":{
+        "label": "Titulo",
+        "placeholder": "Digite um titulo para o form."
+      },
+      "description":{
+        "label": "Descrição",
+        "placeholder": "Descreva o intuito do formulário, o que você espera descobrir com as respostas"
+      },
+      "max_q":{
+        "label": "Número máximo de questões a serem geradas:",
+        "placeholder": "Selecione um"
+      },
+      "type":{
+        "label": "Qual tipo de formulário deseja usar?",
+        "placeholder":"Selecione"
+      }
+    },
+    "form-options": {
+      "general": {
+        "name": "Geral",
+        "description": "Coletar respostas variadas, com foco no intuito estabelecido"
+      },
+      "nps": {
+        "name": "NPS",
+        "description": "Net Promoter Score - avaliar satisfação e fidelização do cliente"
+      },
+      "quality": {
+        "name": "Qualidade",
+        "description": "Foco na qualidade do negócio(estrutura, atendimento...)"
+      },
+      "service": {
+        "name": "Atendimento",
+        "description": "Foco no atendimento ao cliente"
+      },
+      "exp": {
+        "name": "Experiência",
+        "description": "Foco na experiência do cliente com seu negócio"
+      },
+      "product": {
+        "name": "Produto",
+        "description": "Coletar resposta sobre seus produtos"
+      }
+    },
+    "error":"Não foi possivel criar o formulário, tente novamente mais tarde.",
+    "footer": {
+      "cancel-button": "Cancelar",
+      "submit-button": "Gerar smartform"
+    }
+  }
+}
