@@ -16,14 +16,16 @@ import {
 import { Mail } from "@/utils/data";
 import { ScrollArea } from "@/registry/new-york/ui/scroll-area";
 import NoteService from "@/app/api/repository/NoteService";
+import ConfirmActionDialog from "./Modals/ConfirmModal";
 // import { Mail } from "@/app/(app)/examples/mail/data"
 
 interface MailDisplayProps {
   note: any | null;
-  onNoteDeleted: ()=>void
+  onNoteDeleted: ()=>void;
+  deleteButton: boolean
 }
 
-export function NoteDisplay({ note, onNoteDeleted }: MailDisplayProps) {
+export function NoteDisplay({ note, onNoteDeleted, deleteButton }: MailDisplayProps) {
  
 
   const deleteNote = async ()=>{
@@ -39,18 +41,21 @@ export function NoteDisplay({ note, onNoteDeleted }: MailDisplayProps) {
             {note.title}
           </h1>
         )}
-        {note && (
+        {note && deleteButton && (
           <div className="flex ml-auto items-center gap-2">
             <Tooltip>
+              <ConfirmActionDialog description={`Anotação "${note.title}" será deletada!`} onSubmit={(res)=> res? deleteNote(): null}>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" onClick={deleteNote}>
+                <Button variant="ghost" size="icon" >
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">Excluir</span>
                 </Button>
               </TooltipTrigger>
+              </ConfirmActionDialog>
+
               <TooltipContent>Excluir</TooltipContent>
             </Tooltip>
-            <Separator orientation="vertical" className="mx-1 h-6" />
+            {/* <Separator orientation="vertical" className="mx-1 h-6" />
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -59,7 +64,7 @@ export function NoteDisplay({ note, onNoteDeleted }: MailDisplayProps) {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Editar</TooltipContent>
-            </Tooltip>
+            </Tooltip> */}
           </div>
         )}
       </div>

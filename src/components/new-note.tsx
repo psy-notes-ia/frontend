@@ -31,7 +31,7 @@ export default function NewNoteDrawer({ children, note, onSubmited }: any) {
 
   const onSubmit = async () => {
     
-      const patientId = params.get("p");
+      const pacientId = params.get("p");
 
       var _tags = tags.map((e:any)=>e.text);
       const data = {
@@ -39,7 +39,7 @@ export default function NewNoteDrawer({ children, note, onSubmited }: any) {
         tags:_tags,
         title,
         note,
-        patientId,
+        pacientId,
       };
 
       await NoteService.createNote(data);

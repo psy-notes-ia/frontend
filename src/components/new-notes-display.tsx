@@ -64,7 +64,7 @@ export function NewNoteDisplay({ onCancel, onSubmited }: NewNoteProps) {
             <Textarea
               id="note"
               placeholder="Digite aqui sua anotação."
-              className="w-full h-screen border-none"
+              className="w-full h-[90vh] border-none"
               // disabled={note.length >= 2000}
               maxLength={2000}
               onChange={(e) => setNote(e.target.value)}

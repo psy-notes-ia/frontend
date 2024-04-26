@@ -11,21 +11,33 @@ import {
 import { Label } from "@/registry/new-york/ui/label";
 import { Button } from "@/registry/new-york/ui/button";
 import { Input } from "@/registry/new-york/ui/input";
-import { Copy } from "lucide-react";
 import { useState } from "react";
 import PacientService from "@/app/api/repository/PacientService";
 
 export function NewPacient({ children, onSubmited }: any) {
   const [name, setName] = useState("");
-  const onSubmit = async () => {
-    const res = await PacientService.createOne({ name });
+  const [age, setAge] = useState(0);
+  const [reason, setReason] = useState("");
+  const [open, setOpen] = useState(false);
 
-    if (res.status === 201) {
-      onSubmited();
+  const onSubmit = async () => {
+    if (name != "" && age != 0 && reason != "") {
+      const res = await PacientService.createOne({ name, age, reason });
+
+      if (res.status === 201) {
+        onSubmited();
+      }
+      setOpen((prev) => !prev);
     }
   };
+
+  const onChange = ()=>{
+    setOpen((prev) => !prev);
+  }
+  
+
   return (
-    <Dialog>
+    <Dialog open={open}  onOpenChange={onChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -34,14 +46,33 @@ export function NewPacient({ children, onSubmited }: any) {
             Anyone who has this link will be able to view this.
           </DialogDescription> */}
         </DialogHeader>
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-col space-y-4 items-center">
           <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Label htmlFor="email">Nome do paciente</Label>
+            <Label htmlFor="email">Nome do paciente*</Label>
             <Input
               type="text"
               id="email"
               placeholder="Ex. Sarah Martins"
               onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label htmlFor="email">Idade do paciente*</Label>
+            <Input
+              type="number"
+              id="email"
+              placeholder="Ex. 35"
+              onChange={(e) => setAge(Number(e.target.value))}
+            />
+          </div>
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label htmlFor="email">Motivo do tratamento*</Label>
+            <Input
+              type="text"
+              id="email"
+              placeholder="Ex. Superar decepção emocional"
+              onChange={(e) => setReason(e.target.value)}
             />
           </div>
         </div>
@@ -51,11 +82,10 @@ export function NewPacient({ children, onSubmited }: any) {
               Cancelar
             </Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button type="button" onClick={onSubmit}>
-              Salvar
-            </Button>
-          </DialogClose>
+
+          <Button type="button" onClick={onSubmit}>
+            Salvar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

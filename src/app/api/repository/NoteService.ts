@@ -31,13 +31,38 @@ class NoteServiceClass {
     return response;
   }
 
-  async fetchAllNotes(pacientId: string) {
+  async searchNoteByQuery(q: string) {
+    var response = await AppFetch(this.URL_BASE + "/query/"+q, {
+      method: "GET",
+    });
+    // const data = await response.json();
+    return response;
+  }
+
+  async fetchAllNotesByPacient(pacientId: string) {
     var response = await AppFetch(this.URL_BASE + "/"+pacientId, {
       method: "GET",
     });
     // const data = await response.json();
     return response;
   }
+
+  async fetchAllNotes() {
+    var response = await AppFetch(this.URL_BASE + "/", {
+      method: "GET",
+    });
+    // const data = await response.json();
+    return response;
+  }
+
+  async fetchAllNotesSession(pacientId: string) {
+    var response = await AppFetch(this.URL_BASE + "/sessions/"+pacientId, {
+      method: "GET",
+    });
+    // const data = await response.json();
+    return response;
+  }
+
   async updateNote(body: any, id: string) {
     var response = await AppFetch(this.URL_BASE + "/"+id, {
       method: "PATCH",

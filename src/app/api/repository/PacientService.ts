@@ -15,6 +15,7 @@ class PacientClass {
     // const data = await response.json();
     return response;
   }
+  
   async delete(id: string) {
     var response = await AppFetch(this.URL_BASE + "/"+id, {
       method: "DELETE",
@@ -22,8 +23,16 @@ class PacientClass {
     // const data = await response.json();
     return response;
   }
+
   async getAll() {
     var response = await AppFetch(this.URL_BASE + "/", {
+      method: "GET",
+    });
+    // const data = await response.json();
+    return response;
+  }
+  async searchByQuery(query:string) {
+    var response = await AppFetch(this.URL_BASE + "/"+query, {
       method: "GET",
     });
     // const data = await response.json();

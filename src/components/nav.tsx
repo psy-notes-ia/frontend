@@ -1,44 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import { LucideIcon, Search, ChevronDown, UserPlus2 } from "lucide-react";
+import { Search, ChevronDown, UserPlus2, Trash2, XCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/registry/default/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/registry/new-york/ui/tooltip";
+
 import { Input } from "@/registry/new-york/ui/input";
-import { Separator } from "@radix-ui/react-separator";
 import { Avatar, AvatarFallback } from "@/registry/new-york/ui/avatar";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { DropdownMenuComponent } from "./dropdown";
 import { Button } from "@/registry/new-york/ui/button";
 import { NewPacient } from "./new-pacient";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import PacientService from "@/app/api/repository/PacientService";
+import {
+  TooltipTrigger,
+  TooltipContent,
+  Tooltip,
+} from "@/registry/new-york/ui/tooltip";
+
+import ConfirmActionDialog from "./Modals/ConfirmModal";
 
 interface NavProps {
   isCollapsed: boolean;
-  links: {
-    title: string;
-    link: string;
-    label?: string;
-    variant: "default" | "ghost";
-  }[];
   onSearchPacient: (value: string) => void;
   onClickItems: (id?: string) => void;
 }
 
-export function Nav({
-  links,
-  isCollapsed,
-  onSearchPacient,
-  onClickItems,
-}: NavProps) {
+export function Nav({ isCollapsed, onSearchPacient, onClickItems }: NavProps) {
   const params = useSearchParams();
   const session = useSession();
   const [pacients, setPacients] = useState([]);
@@ -51,6 +42,37 @@ export function Nav({
       }
     });
   };
+  const deletePacient = async (id: string) => {
+    var res = await PacientService.delete(id);
+    const pid = params.get("p")!;
+    if (res.status == 200) {
+      if (pid == id) {
+        location.replace("?p=all");
+      } else {
+        loadPacients();
+      }
+    }
+  };
+  const loadPacientsByQuery = (q: string) => {
+    // if (q.length > 3) {
+    //   PacientService.searchByQuery(q).then(async (value) => {
+    //     var res = await value.json();
+    //     if (res != null) {
+    //       setPacients(res);
+    //     }
+    //   });
+    // } else {
+    //   loadPacients();
+    // }
+
+    if (q != "" && q.length > 3) {
+      var _pacients = pacients.filter((p: any) => p.name.startsWith(q));
+      setPacients(_pacients);
+    } else {
+      loadPacients();
+    }
+  };
+
   useEffect(() => {
     loadPacients();
   }, []);
@@ -90,7 +112,7 @@ export function Nav({
               <Input
                 placeholder="Search"
                 className="pl-8"
-                onChange={(e) => onSearchPacient(e.target.value)}
+                onChange={(e) => loadPacientsByQuery(e.target.value)}
               />
             </div>
           </form>
@@ -114,7 +136,7 @@ export function Nav({
 
             <AvatarFallback className="text-black">#</AvatarFallback>
           </Avatar>
-          #
+          Todos
           {/* {l.label && (
                 <span
                   className={cn(
@@ -126,48 +148,62 @@ export function Nav({
                 </span>
               )} */}
         </Link>
-        {pacients.map(
-          (p: any, index) => (
-            <Link
-              key={index}
-              href={"?p=" + p.id}
-              onClick={() => onClickItems(p.id)}
-              className={cn(
-                buttonVariants({
-                  variant: params.get("p") === p.id ? "default" : "ghost",
-                  size: "sm",
-                }),
-                params.get("p") === p.id &&
-                  "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                "justify-start"
-              )}
-            >
-              {/* <l.icon className="h-4 w-4" /> */}
-              <Avatar className="h-5 w-5 mr-2">
-                {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-
-                <AvatarFallback className="text-black">
-                  {" "}
-                  {p.name.substring(0, 1).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              {p.name}
-             
-                <span
-                  className={cn(
-                    "ml-auto",
-                    params.get("p") === p.id &&
+        <div className="h-[55vh] overflow-auto">
+          {pacients.map((p: any, index) => (
+            <div className="flex w-full">
+              <Link
+                key={index}
+                href={"?p=" + p.id}
+                onClick={() => onClickItems(p.id)}
+                className={cn(
+                  buttonVariants({
+                    variant: params.get("p") === p.id ? "default" : "ghost",
+                    size: "sm",
+                  }),
+                  params.get("p") === p.id &&
                     "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                 
-                  )}
-                >
-                  {p._count.Notes}
-                </span>
-            
-            </Link>
-          )
-          // )
-        )}
+                  "justify-start  w-full"
+                )}
+              >
+                <Avatar className="h-5 w-5 mr-2">
+                  <AvatarFallback className="text-black">
+                    {" "}
+                    {p.name.substring(0, 1).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                {p.name}
+                {p._count.Notes != 0 && (
+                  <span
+                    className={cn(
+                      "ml-auto",
+                      params.get("p") === p.id &&
+                        "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white"
+                    )}
+                  >
+                    {p._count.Notes}
+                  </span>
+                )}
+              </Link>
+              {params.get("p") === p.id && (
+                <Tooltip>
+                  <ConfirmActionDialog
+                    description={`O paciente ${p.name} será excluido!`}
+                    onSubmit={(res) => (res ? deletePacient(p.id) : null)}
+                  >
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <XCircle className="h-3 w-3 text-red-400" />
+                        <span className="sr-only">Remover</span>
+                      </Button>
+                    </TooltipTrigger>
+                  </ConfirmActionDialog>
+
+                  <TooltipContent>Remover Paciente</TooltipContent>
+                </Tooltip>
+              )}
+            </div>
+          ))}
+        </div>
       </nav>
       <div className="fixed bottom-2 left-3">
         <NewPacient onSubmited={loadPacients}>

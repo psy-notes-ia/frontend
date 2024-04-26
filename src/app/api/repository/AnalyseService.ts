@@ -7,14 +7,13 @@ class AnalyseServiceClass {
     this.URL_BASE = "/ia";
   }
 
-  async createAnalyse(body: any): Promise<{ data: any; status: any }> {
+  async createAnalyse(body: any) {
     var response = await AppFetch(this.URL_BASE + "/analyse/", {
       method: "POST",
-      body: JSON.stringify({})
+      body: JSON.stringify(body)
     });
 
-    const data = await response.json();
-    return { data: data, status: response.status };
+    return response;
   }
 
   async checkAnalyseStatus(
@@ -30,6 +29,19 @@ class AnalyseServiceClass {
 
     const data = await response.json();
     return { data: data, status: response.status };
+  }
+
+  async fetchAllAnalyses(
+    pacientId: string,
+  ) {
+    var response = await AppFetch(
+      this.URL_BASE + "/analyse/" + pacientId,
+      {
+        method: "GET",
+      }
+    );
+
+    return response;
   }
 }
 

@@ -96,8 +96,8 @@ function getBadgeVariantFromLabel(
   // }
 
   // if (i % 2 == 0) {
-  return "outline";
+  // return "outline";
   // }
   // return "default";
-  // return "secondary"
+  return "secondary"
 }

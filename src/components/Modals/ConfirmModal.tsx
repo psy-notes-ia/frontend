@@ -1,61 +1,49 @@
-import { useTranslation } from "@/app/i18n/client";
-import { Button } from "@nextui-org/button";
+"use client";
+
 import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from "@nextui-org/react";
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogClose,
+  DialogDescription,
+} from "@/registry/new-york/ui/dialog";
+import { Button } from "@/registry/new-york/ui/button";
 
-const ConfirmActionModal = ({
-  onSubmit,
-  isOpen,
-  onOpenChange,
-  lng,
-}: {
-  onSubmit: (onClose: any) => void;
-  isOpen: boolean;
-  onOpenChange: () => void;
-  lng: string;
-}) => {
-  const { t } = useTranslation(lng, "modals");
+interface Props {
+  children: any;
+  description: string;
+  onSubmit: (val: boolean) => void;
+}
 
+export default function  ConfirmActionDialog({ children, description, onSubmit }: Props) {
   return (
-    <Modal
-      isOpen={isOpen}
-      placement={"bottom"}
-      onOpenChange={onOpenChange}
-      hideCloseButton
-    >
-      <ModalContent>
-        {(onClose: any) => (
-          <>
-            <ModalHeader>
-              <h3 className="text-xl font-semibold">
-                {t("confirm-modal.title")}
-              </h3>
-            </ModalHeader>
-            <ModalBody>
-              <span className="text-sm">{t("confirm-modal.description")}</span>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="default" onPress={onClose}>
-                {t("confirm-modal.cancel-button")}
-              </Button>
-              <Button
-                color="primary"
-                type="submit"
-                onClick={() => onSubmit(onClose)}
-              >
-                {t("confirm-modal.confirm-button")}
-              </Button>
-            </ModalFooter>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Deseja realmente prosseguir com essa ação?</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter className="sm:justify-end">
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => onSubmit(false)}
+            >
+              Cancelar
+            </Button>
+          </DialogClose>
+          <DialogClose asChild>
+            <Button type="button" onClick={() => onSubmit(true)}>
+              Continuar
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
-};
-
-export default ConfirmActionModal;
+}

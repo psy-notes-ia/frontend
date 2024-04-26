@@ -76,6 +76,8 @@ export default async function RootLayout({
         className={
           inter.className + ""
         }
+
+        suppressHydrationWarning={true}
       >
         <Providers session={session}>
           {children}

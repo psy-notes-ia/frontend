@@ -32,10 +32,16 @@ export async function middleware(req: any) {
       secret: process.env.NEXTAUTH_SECRET,
     });
 
-    if (!session && path.startsWith(`/${lng}`) && path !=`/${lng}/signin` && path !=`/${lng}/reset-password` && path !=`/${lng}/new-password`) {
+    if (
+      !session &&
+      path.startsWith(`/${lng}`) &&
+      path != `/${lng}/signin` &&
+      path != `/${lng}/reset-password` &&
+      path != `/${lng}/new-password`
+    ) {
       throw new Error("No Authentication");
     }
-    
+
     if (session) {
       const payload = await jose.jwtVerify(
         session?.jwt!,
@@ -48,7 +54,8 @@ export async function middleware(req: any) {
     }
   } catch (error) {
     console.log(error);
-    return NextResponse.redirect(new URL(`/${lng}/signin`, req.url));
+    if (!path.endsWith("/signin"))
+      return NextResponse.redirect(new URL(`/${lng}/signin`, req.url));
   }
 
   return NextResponse.next();
@@ -91,5 +98,5 @@ function SetUpLanguage(req: NextRequest): string {
   if (!lng) lng = acceptLanguage.get(req.headers.get("Accept-Language"));
   if (!lng) lng = fallbackLng;
 
-  return lng??"";
+  return lng ?? "";
 }

@@ -32,37 +32,26 @@ import { useMail } from "@/utils/use-mail";
 import { NoteDisplay } from "./notes-display";
 import { NoteList } from "./notes-list";
 import { Nav } from "./nav";
-import { Mail } from "@/utils/data";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/registry/new-york/ui/button";
 
-import NewNoteDrawer from "./new-note";
 import { NewAnalyse } from "./new-analyse";
 import { NewNoteDisplay } from "./new-notes-display";
 import NoteService from "@/app/api/repository/NoteService";
 import { AnalysesList } from "./analyses-list";
-// import { AccountSwitcher } from "@/app/(app)/examples/mail/components/account-switcher"
-// import { MailDisplay } from "@/app/(app)/examples/mail/components/mail-display"
-// import { MailList } from "@/app/(app)/examples/mail/components/mail-list"
-// import { Nav } from "@/app/(app)/examples/mail/components/nav"
-// import { type Mail } from "@/app/(app)/examples/mail/data"
-// import { useMail } from "@/app/(app)/examples/mail/use-mail"
+import AnalyseService from "@/app/api/repository/AnalyseService";
+import { AllNoteList } from "./all-pacients";
+import { AnalyseDisplay } from "./analyse-display";
+import Image from "next/image";
+import { psypro } from "@/assets";
 
 interface MailProps {
-  accounts: {
-    label: string;
-    email: string;
-    icon: React.ReactNode;
-  }[];
-  mails: Mail[];
   defaultLayout: number[] | undefined;
   defaultCollapsed?: boolean;
   navCollapsedSize: number;
 }
 
-export function Mail({
-  accounts,
-  mails,
+export function Notes({
   defaultLayout = [265, 440, 655],
   defaultCollapsed = false,
   navCollapsedSize,
@@ -71,58 +60,18 @@ export function Mail({
 
   const [isAnalyse, setAnlyseMode] = React.useState(false);
   const [newNote, setNewNote] = React.useState(false);
-
-  const changeAnlyseMode = () => setAnlyseMode((prev) => !prev);
-  const allLinks: {
-    title: string;
-    link: string;
-    label?: string;
-    variant: "default" | "ghost";
-  }[] = [
-    {
-      title: "#",
-      label: "128",
-
-      link: "?p=all",
-      variant: "default",
-    },
-    {
-      title: "Jackson Aguiar",
-      label: "9",
-      link: "?p=f2bae870-9e5b-4343-84d7-5dfbb7ecf5c2",
-      variant: "ghost",
-    },
-    {
-      title: "Romulo Neto",
-      label: "",
-      link: "?p=76f31560-8b3f-4c49-850a-50c01c2c012b",
-      variant: "ghost",
-    },
-    {
-      title: "Rodrigo Santos",
-      label: "23",
-      link: "?p=dc9dab3f-5c3c-4e85-b1b6-3b9ae3321538",
-      variant: "ghost",
-    },
-  ];
-  const [links, setLinks] = React.useState<
-    {
-      title: string;
-      link: string;
-      label?: string;
-      variant: "default" | "ghost";
-    }[]
-  >(allLinks);
+  const [notes, setNotes] = React.useState<any[]>([]);
+  const [lastNotes, setLastNotes] = React.useState<any[]>([]);
+  const [analyses, setAnalyses] = React.useState<any[]>([]);
   const [mail, setMail] = useMail();
 
   const params = useSearchParams();
-  const [notes, setNotes] = React.useState<any[]>([]);
 
-  const loadNotes = (id?: string) => {
+  const changeAnlyseMode = () => setAnlyseMode((prev) => !prev);
+
+  const loadNotesByPacient = (id?: string) => {
     const p = params.get("p");
-
     var _id = "";
-
     if (id != undefined) {
       _id = id;
     } else if (p != "all" && p != null) {
@@ -131,7 +80,7 @@ export function Mail({
 
     if (_id != "") {
       console.log("LOAD NOTES/.....");
-      NoteService.fetchAllNotes(_id).then(async (value) => {
+      NoteService.fetchAllNotesByPacient(_id).then(async (value) => {
         var res = await value.json();
         if (res != null) {
           setNotes(res);
@@ -140,16 +89,63 @@ export function Mail({
     }
   };
 
-  React.useEffect(() => {
-    loadNotes();
-  }, []);
+  const loadNotes = () => {
+    NoteService.fetchAllNotes().then(async (value) => {
+      var res = await value.json();
+      if (res != null) {
+        setLastNotes(res);
+      }
+    });
+  };
+
+  const loadAnalyses = (id?: string) => {
+    const p = params.get("p");
+    var _id = "";
+    if (id != undefined) {
+      _id = id;
+    } else if (p != "all" && p != null) {
+      _id = p;
+    }
+
+    if (_id != "") {
+      AnalyseService.fetchAllAnalyses(_id).then(async (value) => {
+        var res = await value.json();
+        if (res != null) {
+          setAnalyses(res);
+        }
+      });
+    }
+  };
+
+  const loadAnalyseStatus = () => {
+    const p = params.get("p");
+    const hasNotAnalysed = analyses.some((e) => e.analysed == false);
+    if (hasNotAnalysed && p != "all") {
+      loadAnalyses();
+    }
+  };
 
   React.useEffect(() => {
     if (location && params.get("p") == null) location.assign("?p=all");
   });
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      loadAnalyseStatus();
+    }, 5 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  React.useEffect(() => {
+    loadNotesByPacient();
+    loadAnalyses();
+    loadNotes();
+  }, []);
   const onClickedNavItens = (id?: string) => {
     setMail({ ...mail, selected: null });
-    loadNotes(id);
+    loadNotesByPacient(id);
+    loadAnalyses(id);
     console.log();
   };
   return (
@@ -180,23 +176,23 @@ export function Mail({
         >
           <div
             className={cn(
-              "flex h-[52px] items-center justify-center",
+              "flex h-[52px] items-center justify-center border-r-1",
               isCollapsed ? "h-[52px]" : "px-2"
             )}
-          ></div>
+          >
+            <Image src={psypro} className="w-1/2" alt="psypro"></Image>
+          </div>
           <Separator />
           <Nav
             isCollapsed={isCollapsed}
-            links={links}
             onClickItems={(id?: string) => onClickedNavItens(id)}
             onSearchPacient={(e) => {
-              if (e != "") {
-                var _links = links.filter((l) => l.title.startsWith(e));
-
-                setLinks(_links);
-              } else {
-                setLinks(allLinks);
-              }
+              // if (e != "") {
+              //   var _links = links.filter((l) => l.title.startsWith(e));
+              //   setLinks(_links);
+              // } else {
+              //   setLinks(allLinks);
+              // }
             }}
           />
         </div>
@@ -204,7 +200,7 @@ export function Mail({
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
           <Tabs defaultValue="all">
             <div className="flex items-center px-4 py-2">
-              <h1>Dashboard</h1>
+              {/* <h1>Dashboard</h1> */}
               <TabsList className="ml-auto">
                 {params.get("p") != "all" && (
                   <TabsTrigger
@@ -230,23 +226,26 @@ export function Mail({
 
             {params.get("p") != "all" && (
               <div className=" flex space-x-1 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <form className="flex-grow">
-                  <div className="relative">
-                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Search" className="pl-8" />
-                  </div>
-                </form>
+                {/* <form className="flex-grow">
+                    <div className="relative">
+                      <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <Input placeholder="Search" className="pl-8" />
+                    </div>
+                  </form> */}
 
                 {isAnalyse ? (
-                  <NewAnalyse>
-                    <Button>
+                  <NewAnalyse onSubmited={loadAnalyses}>
+                    <Button className="w-[200px]">
                       <BarChart2 className="h-4 w-4 mr-2" />
                       Nova Analise
                     </Button>
                   </NewAnalyse>
                 ) : (
                   // <NewNoteDrawer>
-                  <Button onClick={() => setNewNote((prev) => !prev)}>
+                  <Button
+                    className="w-[200px]"
+                    onClick={() => setNewNote((prev) => !prev)}
+                  >
                     <FilePlus2 className="h-4 w-4 mr-2" />
                     Nova anotação
                   </Button>
@@ -264,29 +263,43 @@ export function Mail({
               {params.get("p") != "all" ? (
                 <NoteList items={notes} />
               ) : (
-                <AllPacients />
+                <AllNoteList items={lastNotes} />
               )}
             </TabsContent>
             <TabsContent value="unread" className="m-0">
-              <AnalysesList items={notes} />
+              {params.get("p") != "all" ? (
+                <AnalysesList items={analyses} />
+              ) : (
+                <AllNoteList items={lastNotes} />
+              )}
             </TabsContent>
           </Tabs>
           {/* <AllPacients /> */}
         </ResizablePanel>
         <ResizableHandle withHandle />
 
-        {params.get("p") != "all" && (
-          <ResizablePanel defaultSize={defaultLayout[2]}>
-            {newNote ? (
-              <NewNoteDisplay onCancel={() => setNewNote((prev) => !prev)} onSubmited={loadNotes}/>
-            ) : (
-              <NoteDisplay
-              onNoteDeleted={loadNotes}
-                note={notes.find((item) => item.id === mail.selected) || null}
-              />
-            )}
-          </ResizablePanel>
-        )}
+        {/* {params.get("p") != "all" && ( */}
+        <ResizablePanel defaultSize={defaultLayout[2]}>
+          {newNote ? (
+            <NewNoteDisplay
+              onCancel={() => setNewNote((prev) => !prev)}
+              onSubmited={loadNotesByPacient}
+            />
+          ) : isAnalyse ? (
+            <AnalyseDisplay
+              analyse={
+                analyses.find((item) => item.id === mail.selected) || null
+              }
+            />
+          ) : (
+            <NoteDisplay
+              deleteButton={params.get("p") != "all"}
+              onNoteDeleted={loadNotesByPacient}
+              note={notes.find((item) => item.id === mail.selected) || null}
+            />
+          )}
+        </ResizablePanel>
+        {/* )} */}
       </ResizablePanelGroup>
     </TooltipProvider>
   );

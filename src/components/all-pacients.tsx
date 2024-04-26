@@ -16,12 +16,13 @@ interface MailListProps {
   items: any[];
 }
 
-export function AnalysesList({ items }: MailListProps) {
+export function AllNoteList({ items }: MailListProps) {
   const [mail, setMail] = useMail();
 
   return (
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-2 p-4 pt-0  mb-32">
+        <h1 className="font-semibold text-xl pt-4">Ultimas anotações</h1>
         {items.map((item) => (
           <button
             key={item.id}
@@ -33,14 +34,20 @@ export function AnalysesList({ items }: MailListProps) {
               setMail({
                 ...mail,
                 selected: item.id,
-                isNote: false
               })
             }
           >
             <div className="flex w-full flex-col gap-1">
               <div className="flex items-center">
                 <div className="flex items-center gap-2">
-                  <div className="font-semibold">{item.title}</div>
+                  <div className="font-semibold capitalize flex items-center">
+                    {/* <span className="flex h-[6px] w-[6px] rounded-full bg-blue-600 mr-1" /> */}
+                    {item.Pacient ? item.Pacient.name : ""} 
+                  </div>
+                  <span>
+
+                    {item.title}
+                  </span>
                   {/* {!item.read && (
                     <span className="flex h-2 w-2 rounded-full bg-blue-600" />
                   )} */}
@@ -53,26 +60,26 @@ export function AnalysesList({ items }: MailListProps) {
                       : "text-muted-foreground"
                   )}
                 >
-                  {formatDistanceToNow(new Date(item.createdAt), {
+                  {/* {formatDistanceToNow(new Date(item.date), {
                     addSuffix: true,
-                  })}
+                  })} */}
+                  {format(item.session, "PPP", { locale: ptBR })}
                 </div>
               </div>
-              <div className="text-xs font-medium flex items-center">
+              {/* <div className="text-xs font-medium flex items-center">
                 {" "}
                 <span className="flex h-1 w-1 rounded-full bg-blue-600 mr-1" />
-                {item.analysed ? "Analisado":"Processando"}
-              </div>
+                {format(item.session, "PPP", { locale: ptBR })}
+              </div> */}
             </div>
-            {/* <div className="line-clamp-2 text-xs text-muted-foreground">
+            <div className="line-clamp-2 mb-1 text-xs text-muted-foreground">
               {item.summary}
-            </div> */}
-            {item.sessions.length ? (
+            </div>
+            {item.tags.length ? (
               <div className="flex items-center gap-2">
-                {item.sessions.map((label: any, i: number) => (
+                {item.tags.map((label: any, i: number) => (
                   <Badge key={label} variant={getBadgeVariantFromLabel(i)}>
-                
-                    {format(label, "PPP", { locale: ptBR })}
+                    {label}
                   </Badge>
                 ))}
               </div>
@@ -94,8 +101,8 @@ function getBadgeVariantFromLabel(
   // }
 
   // if (i % 2 == 0) {
-    // return "outline";
+  // return "outline";
   // }
-  return "default";
-  // return "secondary"
+  // return "default";
+  return "secondary"
 }

@@ -16,24 +16,44 @@ import { useState } from "react";
 
 import MultiSelectComponent from "./multi-select";
 import { useSearchParams } from "next/navigation";
+import AnalyseService from "@/app/api/repository/AnalyseService";
 
-export function NewAnalyse({ children }: any) {
+export function NewAnalyse({ children, onSubmited }: any) {
   const params = useSearchParams();
-  
+
   const [title, setTitle] = useState("");
   const [open, setOpen] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState<any[]>([]);
 
-  const onSubmit = () => {
-    const patientId = params.get("p");
-    
-    const data = {title, sessions: selectedOptions, patientId};
+  const onSubmit = async () => {
+    const pacientId = params.get("p");
 
-    setOpen(prev=>!prev);
+    const data = {
+      title,
+      notes: selectedOptions.map((e: any) => e.value),
+      pacientId,
+    };
+
+    const res = await AnalyseService.createAnalyse(data);
+
+    if (res.status == 201) {
+      onSubmited();
+      setOpen((prev) => !prev);
+      clear();
+    }
+  };
+
+  const clear = () => {
+    setTitle("");
+    setSelectedOptions([]);
+  };
+  const onChangeDialog = () => {
+    setOpen((prev) => !prev);
+    clear();
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen} >
+    <Dialog open={open} onOpenChange={onChangeDialog}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -48,7 +68,7 @@ export function NewAnalyse({ children }: any) {
             <Input
               type="text"
               id="title"
-              placeholder="Ex. Sarah Martins"
+              placeholder="Ex. Analise 1"
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
@@ -68,9 +88,9 @@ export function NewAnalyse({ children }: any) {
             </Button>
           </DialogClose> */}
           {/* <DialogClose asChild> */}
-            <Button type="button" onClick={onSubmit}>
-              Analisar
-            </Button>
+          <Button type="button" onClick={onSubmit}>
+            Analisar
+          </Button>
           {/* </DialogClose> */}
         </DialogFooter>
       </DialogContent>

@@ -1,109 +1,10 @@
-import React, { useState } from "react";
-// import { Container, Grid, Typography } from "@mui/material";
+import NoteService from "@/app/api/repository/NoteService";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
-const iceCreamFlavors = [
-  {
-    value: "vanilla",
-    label: "Vanilla",
-    description: "Pure Pleasure in Every Scoop!",
-  },
-  {
-    value: "chocolate",
-    label: "Chocolate",
-    description: "Indulge in Chocolate Bliss!",
-  },
-  {
-    value: "strawberry",
-    label: "Strawberry",
-    description: "Sweet, Juicy, and Simply Berrylicious!",
-  },
-  {
-    value: "mintChocolateChip",
-    label: "Mint Chocolate Chip",
-    description: "Cool Mint, Chocolate Bliss!",
-  },
-  {
-    value: "rockyRoad",
-    label: "Rocky Road",
-    description: "A Bumpy Road to Chocolate Heaven!",
-  },
-  {
-    value: "cookieDough",
-    label: "Cookie Dough",
-    description: "Dig In for a Dough-licious Delight!",
-  },
-  {
-    value: "butterPecan",
-    label: "Butter Pecan",
-    description: "Rich, Creamy, and Nutty Perfection!",
-  },
-  {
-    value: "coffee",
-    label: "Coffee",
-    description: "Wake Up Your Taste Buds with Coffee Creaminess!",
-  },
-  {
-    value: "raspberryRipple",
-    label: "Raspberry Ripple",
-    description: "Swirls of Raspberry Delight in Every Bite!",
-  },
-  {
-    value: "pistachio",
-    label: "Pistachio",
-    description: "Nuts for Pistachio? You Bet-chachio!",
-  },
-  {
-    value: "cookiesAndCream",
-    label: "Cookies and Cream",
-    description: "Classic Cookies Meet Dreamy Cream!",
-  },
-  {
-    value: "caramelSwirl",
-    label: "Caramel Swirl",
-    description: "Caramel Heaven in Every Swirl!",
-  },
-  {
-    value: "neapolitan",
-    label: "Neapolitan",
-    description: "Three Flavors, One Spoonful of Happiness!",
-  },
-  {
-    value: "toffeeCrunch",
-    label: "Toffee Crunch",
-    description: "Crunch Your Way to Toffee Delight!",
-  },
-  {
-    value: "blueberryCheesecake",
-    label: "Blueberry Cheesecake",
-    description: "Creamy Cheesecake with a Blueberry Burst!",
-  },
-  {
-    value: "rainbowSherbet",
-    label: "Rainbow Sherbet",
-    description: "Taste the Rainbow, Scoop by Scoop!",
-  },
-  {
-    value: "cherryGarcia",
-    label: "Cherry Garcia",
-    description: "Cherry Goodness with a Dash of Fun!",
-  },
-  {
-    value: "lemonSorbet",
-    label: "Lemon Sorbet",
-    description: "Tangy and Refreshing, Lemon Sorbet Delight!",
-  },
-  {
-    value: "coconutBliss",
-    label: "Coconut Bliss",
-    description: "Escape to the Tropics with Every Bite!",
-  },
-  {
-    value: "mapleWalnut",
-    label: "Maple Walnut",
-    description: "A Taste of Maple Syrup Magic!",
-  },
-];
+import { useSearchParams } from "next/navigation";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 const customStyles = {
   control: (provided: any) => ({
@@ -123,7 +24,10 @@ const customStyles = {
 const formatOptionLabel = ({ label, description }: any) => (
   <div>
     <strong>{label}</strong>
-    <span style={{ color: "gray" }}> ({description})</span>
+    <span style={{ color: "gray" }}>
+      {" "}
+      ({format(description, "PPP", { locale: ptBR })})
+    </span>
   </div>
 );
 
@@ -134,28 +38,38 @@ export default function MultiSelectComponent({
   onChange: (value: any) => void;
   values: any[];
 }) {
+  const params = useSearchParams();
+
+  const [sessions, setSessions] = useState<any[]>([]);
   const handleMultiSelectChange = (selected: any) => {
-    onChange(selected);
+    if (values.length != 6) {
+      onChange(selected);
+    }
   };
+
+  const fetchSession = async () => {
+    var res = await NoteService.fetchAllNotesSession(params.get("p")!);
+    const data = ((await res.json()) as []).map((e: any) => {
+      return { label: e.title, value: e.id, description: e.session };
+    });
+    setSessions(data);
+  };
+  useEffect(() => {
+    fetchSession();
+  }, []);
 
   return (
     <>
       <Select
-        options={iceCreamFlavors}
+        options={sessions}
         value={values}
         onChange={handleMultiSelectChange}
-        placeholder="Selecione até 5"
+        placeholder="Selecione até 6"
         styles={customStyles}
-        isDisabled={values.length == 5}
         isMulti
         formatOptionLabel={formatOptionLabel}
         noOptionsMessage={() => "Anotação não encontrada"}
       />
-      {values.length > 0 && (
-        <div className="">
-          Anotações a serem analisadas: {values.map((option: any) => option.label).join(", ")}
-        </div>
-      )}
     </>
   );
 }

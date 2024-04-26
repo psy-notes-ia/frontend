@@ -1,11 +1,7 @@
-import { Mail } from "@/components/notes"
+import { Notes } from "@/components/notes"
 import { cookies } from "next/headers"
-import Image from "next/image"
 
-// import { Mail } from "@/app/(app)/examples/mail/components/mail"
-import { accounts, mails } from "../../utils/data"
-
-export default function MailPage() {
+export default function NotePage() {
   const layout = cookies().get("react-resizable-panels:layout")
   const collapsed = cookies().get("react-resizable-panels:collapsed")
 
@@ -31,9 +27,7 @@ export default function MailPage() {
         />
       </div> */}
       <div className="flex-col md:flex">
-        <Mail
-          accounts={accounts}
-          mails={mails}
+        <Notes
           defaultLayout={defaultLayout}
           defaultCollapsed={defaultCollapsed}
           navCollapsedSize={4}
