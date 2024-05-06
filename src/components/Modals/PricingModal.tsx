@@ -1,7 +1,7 @@
 "use client";
 import PaymentService from "@/app/api/repository/PaymentService";
 import { BasicFetch } from "@/app/api/repository/fetch";
-import { useTranslation } from "@/app/i18n/client";
+import { useTranslation } from "@/i18n/client";
 import {
   Modal,
   ModalContent,

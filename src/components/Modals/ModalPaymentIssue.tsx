@@ -12,6 +12,7 @@ import {
 import { useSession } from "next-auth/react";
 import { AlertCircle } from "lucide-react";
 import { useTranslation } from "@/i18n/client";
+import PaymentService from "@/app/api/repository/PaymentService";
 
 export default function ModalPaymentIssue({
   isOpen,
@@ -28,8 +29,8 @@ export default function ModalPaymentIssue({
   const goToPortal = async () => {
     const user = data?.user;
     if (user) {
-      // const { data, status } = await PaymentService.goToStripeCustomerPortal();
-      // window.location.assign(data.url);
+      const { data, status } = await PaymentService.goToStripeCustomerPortal();
+      window.location.assign(data.url);
     }
   };
   return (
