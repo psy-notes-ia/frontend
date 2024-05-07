@@ -11,7 +11,6 @@ import {
   Settings,
   Settings2,
   Share,
-  SquareTerminal,
   SquareUser,
   Triangle,
   Turtle,
@@ -68,7 +67,7 @@ export default function Dashboard() {
                 className="rounded-lg bg-muted"
                 aria-label="Playground"
               >
-                <SquareTerminal className="size-5" />
+                {/* <SquareTerminal className="size-5" /> */}
               </Button>
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={5}>
