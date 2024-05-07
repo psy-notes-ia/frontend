@@ -9,9 +9,9 @@ import Providers from "./providers";
 import { getServerSession } from "next-auth";
 
 
-export async function generateStaticParams() {
-  return languages.map((lng) => ({ lng }))
-}
+// export async function generateStaticParams() {
+//   return languages.map((lng) => ({ lng }))
+// }
 
 export async function generateMetadata({ params: { lng } }: {
   params: {
