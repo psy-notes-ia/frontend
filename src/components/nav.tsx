@@ -83,7 +83,11 @@ export function Nav({ isCollapsed, onSearchPacient, onClickItems }: NavProps) {
       className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2 h-full border-r-[1px]"
     >
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-        <DropdownMenuComponent signout={() => signOut()}>
+        <DropdownMenuComponent
+          signout={() =>
+            signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL })
+          }
+        >
           <div className="mb-2 cursor-pointer transition-colors hover:border-black bg-gray-100 flex items-center justify-between gap-2 border rounded-[8px] p-2">
             <div className="avatar rounded-full min-h-8 min-w-8 bg-[#0b9de6] text-white font-[700] flex items-center justify-center">
               <p>
