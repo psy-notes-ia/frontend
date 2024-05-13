@@ -132,7 +132,7 @@ export function Notes({
   React.useEffect(() => {
     const interval = setInterval(() => {
       loadAnalyseStatus();
-    }, 5 * 1000);
+    }, 3 * 1000);
 
     return () => clearInterval(interval);
   }, []);

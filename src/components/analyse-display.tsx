@@ -28,11 +28,11 @@ export function AnalyseDisplay({ analyse }: MailDisplayProps) {
                 <p>{DecryptData(analyse.result)}</p>
 
                 <h3 className="mt-2 font-semibold">
-                  {(analyse.attetionPoints as []).length != 0 &&
+                  {analyse.attetionPoints!= undefined && (analyse.attetionPoints as []).length != 0 &&
                     "Pontos de atenção"}
                 </h3>
                 <ul>
-                  {(analyse.attetionPoints as []).map((e, i) => {
+                  {analyse.attetionPoints!= undefined &&(analyse.attetionPoints as []).map((e, i) => {
                     return <li key={i}>- {e}</li>;
                   })}
                 </ul>
