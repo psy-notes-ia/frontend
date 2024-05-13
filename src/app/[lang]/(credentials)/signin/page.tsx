@@ -87,6 +87,7 @@ export default function SignInForm({
         });
       }
     } else {
+      udpateLoading();
       toast.error(t("signup.error"), {
         position: "top-right",
         autoClose: 5000,
