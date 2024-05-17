@@ -110,38 +110,44 @@ export function Nav({ isCollapsed, onSearchPacient, onClickItems }: NavProps) {
         </DropdownMenuComponent>
         <h1 className="pt-2 font-semibold text-xl">Pacientes</h1>
         <div className="bg-background/95 mb-2 pt-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <form>
-            <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search"
-                className="pl-8"
-                onChange={(e) => loadPacientsByQuery(e.target.value)}
-              />
-            </div>
-          </form>
+          {pacients.length != 0 ? (
+            <form>
+              <div className="relative">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search"
+                  className="pl-8"
+                  onChange={(e) => loadPacientsByQuery(e.target.value)}
+                />
+              </div>
+            </form>
+          ) : null}
         </div>
-        <Link
-          href={"?p=all"}
-          onClick={() => onClickItems()}
-          className={cn(
-            buttonVariants({
-              variant: params.get("p") === "all" ? "default" : "ghost",
-              size: "sm",
-            }),
-            params.get("p") === "all" &&
-              "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-            "justify-start"
-          )}
-        >
-          <Avatar className="h-5 w-5 mr-2">
-            <AvatarFallback className="text-black">#</AvatarFallback>
-          </Avatar>
-          Todos
-        </Link>
+        {pacients.length != 0 ? (
+          <Link
+            href={"?p=all"}
+            onClick={() => onClickItems()}
+            className={cn(
+              buttonVariants({
+                variant: params.get("p") === "all" ? "default" : "ghost",
+                size: "sm",
+              }),
+              params.get("p") === "all" &&
+                "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+              "justify-start"
+            )}
+          >
+            <Avatar className="h-5 w-5 mr-2">
+              <AvatarFallback className="text-black">#</AvatarFallback>
+            </Avatar>
+            Todos
+          </Link>
+        ) : null}
         <div className="h-[55vh] overflow-auto">
           {pacients.length == 0 ? (
-            <span className="text-foreground-400 text-sm m-auto">Adicione seu primeiro paciente</span>
+            <span className="text-foreground-400 text-sm mt-40">
+              Adicione seu primeiro paciente
+            </span>
           ) : (
             pacients.map((p: any, index) => (
               <div className="flex w-full" key={index}>

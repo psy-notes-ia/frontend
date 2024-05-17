@@ -79,7 +79,6 @@ export function Notes({
     }
 
     if (_id != "") {
-      console.log("LOAD NOTES/.....");
       NoteService.fetchAllNotesByPacient(_id).then(async (value) => {
         var res = await value.json();
         if (res != null) {
@@ -146,7 +145,6 @@ export function Notes({
     setMail({ ...mail, selected: null });
     loadNotesByPacient(id);
     loadAnalyses(id);
-    console.log();
   };
   return (
     <TooltipProvider delayDuration={0}>
@@ -295,7 +293,7 @@ export function Notes({
             <NoteDisplay
               deleteButton={params.get("p") != "all"}
               onNoteDeleted={loadNotesByPacient}
-              note={notes.find((item) => item.id === mail.selected) || null}
+              note={notes.find((item) => item.id === mail.selected) || lastNotes.find((item) => item.id === mail.selected)}
             />
           )}
         </ResizablePanel>
