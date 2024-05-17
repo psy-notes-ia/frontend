@@ -10,9 +10,8 @@ import { useMail } from "@/utils/use-mail";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { DecryptData } from "@/utils/crypto";
-// import { Mail } from "@/app/(app)/examples/mail/data"
-// import { useMail } from "@/app/(app)/examples/mail/use-mail"
-
+import Security from "@/utils/security";
+const security = new Security();
 interface MailListProps {
   items: any[];
 }
@@ -74,7 +73,7 @@ export function AllNoteList({ items }: MailListProps) {
               </div> */}
             </div>
             <div className="line-clamp-2 mb-1 text-xs text-muted-foreground">
-              {DecryptData(item.summary)}
+              {security.decrypt(item.summary)}
             </div>
             {item.tags.length ? (
               <div className="flex items-center gap-2">

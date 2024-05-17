@@ -134,79 +134,70 @@ export function Nav({ isCollapsed, onSearchPacient, onClickItems }: NavProps) {
             "justify-start"
           )}
         >
-          {/* <l.icon className="h-4 w-4" /> */}
           <Avatar className="h-5 w-5 mr-2">
-            {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-
             <AvatarFallback className="text-black">#</AvatarFallback>
           </Avatar>
           Todos
-          {/* {l.label && (
-                <span
-                  className={cn(
-                    "ml-auto",
-                    l.variant === "default" && "text-background dark:text-white"
-                  )}
-                >
-                  {l.label}
-                </span>
-              )} */}
         </Link>
         <div className="h-[55vh] overflow-auto">
-          {pacients.map((p: any, index) => (
-            <div className="flex w-full">
-              <Link
-                key={index}
-                href={"?p=" + p.id}
-                onClick={() => onClickItems(p.id)}
-                className={cn(
-                  buttonVariants({
-                    variant: params.get("p") === p.id ? "default" : "ghost",
-                    size: "sm",
-                  }),
-                  params.get("p") === p.id &&
-                    "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                  "justify-start  w-full"
-                )}
-              >
-                <Avatar className="h-5 w-5 mr-2">
-                  <AvatarFallback className="text-black">
-                    {" "}
-                    {p.name.substring(0, 1).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                {p.name}
-                {p._count.Notes != 0 && (
-                  <span
-                    className={cn(
-                      "ml-auto",
-                      params.get("p") === p.id &&
-                        "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white"
-                    )}
-                  >
-                    {p._count.Notes}
-                  </span>
-                )}
-              </Link>
-              {params.get("p") === p.id && (
-                <Tooltip>
-                  <ConfirmActionDialog
-                    description={`O paciente ${p.name} será excluido!`}
-                    onSubmit={(res) => (res ? deletePacient(p.id) : null)}
-                  >
-                    <TooltipTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <XCircle className="h-3 w-3 text-red-400" />
-                        <span className="sr-only">Remover</span>
-                      </Button>
-                    </TooltipTrigger>
-                  </ConfirmActionDialog>
+          {pacients.length == 0 ? (
+            <span className="text-foreground-400 text-sm m-auto">Adicione seu primeiro paciente</span>
+          ) : (
+            pacients.map((p: any, index) => (
+              <div className="flex w-full" key={index}>
+                <Link
+                  key={index}
+                  href={"?p=" + p.id}
+                  onClick={() => onClickItems(p.id)}
+                  className={cn(
+                    buttonVariants({
+                      variant: params.get("p") === p.id ? "default" : "ghost",
+                      size: "sm",
+                    }),
+                    params.get("p") === p.id &&
+                      "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+                    "justify-start  w-full"
+                  )}
+                >
+                  <Avatar className="h-5 w-5 mr-2">
+                    <AvatarFallback className="text-black">
+                      {" "}
+                      {p.name.substring(0, 1).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  {p.name}
+                  {p._count.Notes != 0 && (
+                    <span
+                      className={cn(
+                        "ml-auto",
+                        params.get("p") === p.id &&
+                          "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white"
+                      )}
+                    >
+                      {p._count.Notes}
+                    </span>
+                  )}
+                </Link>
+                {params.get("p") === p.id && (
+                  <Tooltip>
+                    <ConfirmActionDialog
+                      description={`O paciente ${p.name} será excluido!`}
+                      onSubmit={(res) => (res ? deletePacient(p.id) : null)}
+                    >
+                      <TooltipTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <XCircle className="h-3 w-3 text-red-400" />
+                          <span className="sr-only">Remover</span>
+                        </Button>
+                      </TooltipTrigger>
+                    </ConfirmActionDialog>
 
-                  <TooltipContent>Remover Paciente</TooltipContent>
-                </Tooltip>
-              )}
-            </div>
-          ))}
+                    <TooltipContent>Remover Paciente</TooltipContent>
+                  </Tooltip>
+                )}
+              </div>
+            ))
+          )}
         </div>
       </nav>
       <div className="fixed bottom-2 left-3">

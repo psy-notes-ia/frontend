@@ -2,7 +2,8 @@ import { ScrollArea } from "@/registry/new-york/ui/scroll-area";
 import NoteService from "@/app/api/repository/NoteService";
 import ConfirmActionDialog from "./Modals/ConfirmModal";
 import DNALoader from "./DNALoader";
-import { DecryptData } from "@/utils/crypto";
+import Security from "@/utils/security";
+const security = new Security();
 // import { Mail } from "@/app/(app)/examples/mail/data"
 
 interface MailDisplayProps {
@@ -25,7 +26,7 @@ export function AnalyseDisplay({ analyse }: MailDisplayProps) {
           <div className="flex-1 whitespace-pre-wrap p-4 text-sm mb-12">
             {analyse && analyse.analysed && (
               <div>
-                <p>{DecryptData(analyse.result)}</p>
+                <p>{security.decrypt(analyse.result)}</p>
 
                 <h3 className="mt-2 font-semibold">
                   {analyse.attetionPoints!= undefined && (analyse.attetionPoints as []).length != 0 &&

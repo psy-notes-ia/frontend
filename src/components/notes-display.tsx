@@ -1,13 +1,6 @@
-// import addDays from "date-fns/addDays"
-// import addHours from "date-fns/addHours"
-import { format, addHours, addDays, nextSaturday } from "date-fns";
-// import nextSaturday from "date-fns/nextSaturday"
 import { Trash2, Edit } from "lucide-react";
 
 import { Button } from "@/registry/new-york/ui/button";
-import { Separator } from "@/registry/new-york/ui/separator";
-import { Switch } from "@/registry/new-york/ui/switch";
-import { Textarea } from "@/registry/new-york/ui/textarea";
 import {
   Tooltip,
   TooltipContent,
@@ -18,6 +11,9 @@ import { ScrollArea } from "@/registry/new-york/ui/scroll-area";
 import NoteService from "@/app/api/repository/NoteService";
 import ConfirmActionDialog from "./Modals/ConfirmModal";
 import { DecryptData } from "@/utils/crypto";
+
+import Security from "@/utils/security";
+const security = new Security();
 // import { Mail } from "@/app/(app)/examples/mail/data"
 
 interface MailDisplayProps {
@@ -80,7 +76,7 @@ export function NoteDisplay({
           <div className="flex-1 whitespace-pre-wrap p-4 text-sm mb-12">
             {note && (
               <>
-                <p>{DecryptData(note.note)}</p>
+                <p>{security.decrypt(note.note)}</p>
               </>
             )}
           </div>
