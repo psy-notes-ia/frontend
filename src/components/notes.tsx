@@ -142,10 +142,22 @@ export function Notes({
     loadNotes();
   }, []);
   const onClickedNavItens = (id?: string) => {
-    setMail({ ...mail, selected: null });
+    setMail({ ...mail, selected: null, isEditMode: false });
+    setNewNote(prev=>false);
     loadNotesByPacient(id);
     loadAnalyses(id);
   };
+
+  const editMode = () => {
+    setMail({ ...mail, isEditMode: true });
+    setNewNote((prev) => !prev);
+  };
+
+  const onCancel = () => {
+    setMail({ ...mail, isEditMode: false });
+    setNewNote((prev) => !prev);
+  };
+
   return (
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup
@@ -249,12 +261,7 @@ export function Notes({
                   </Button>
                   // </NewNoteDrawer>
                 )}
-                {/* <NewNoteDrawer>
-                  <Button>
-                    <FilePlus2 className="h-4 w-4 mr-2" />
-                    Nova anotação
-                  </Button>
-                </NewNoteDrawer> */}
+              
               </div>
             )}
             <TabsContent value="all" className="m-0">
@@ -280,7 +287,8 @@ export function Notes({
         <ResizablePanel defaultSize={defaultLayout[2]}>
           {newNote ? (
             <NewNoteDisplay
-              onCancel={() => setNewNote((prev) => !prev)}
+              annotation={notes.find((item) => item.id === mail.selected)}
+              onCancel={onCancel}
               onSubmited={loadNotesByPacient}
             />
           ) : isAnalyse ? (
@@ -293,7 +301,11 @@ export function Notes({
             <NoteDisplay
               deleteButton={params.get("p") != "all"}
               onNoteDeleted={loadNotesByPacient}
-              note={notes.find((item) => item.id === mail.selected) || lastNotes.find((item) => item.id === mail.selected)}
+              onEdit={editMode}
+              note={
+                notes.find((item) => item.id === mail.selected) ||
+                lastNotes.find((item) => item.id === mail.selected)
+              }
             />
           )}
         </ResizablePanel>

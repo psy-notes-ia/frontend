@@ -13,6 +13,7 @@ import ConfirmActionDialog from "./Modals/ConfirmModal";
 import { DecryptData } from "@/utils/crypto";
 
 import Security from "@/utils/security";
+import { Separator } from "@/registry/new-york/ui/separator";
 const security = new Security();
 // import { Mail } from "@/app/(app)/examples/mail/data"
 
@@ -20,12 +21,14 @@ interface MailDisplayProps {
   note: any | null;
   onNoteDeleted: () => void;
   deleteButton: boolean;
+  onEdit: ()=>void;
 }
 
 export function NoteDisplay({
   note,
   onNoteDeleted,
   deleteButton,
+  onEdit
 }: MailDisplayProps) {
   const deleteNote = async () => {
     await NoteService.deleteNote(note.id);
@@ -55,16 +58,16 @@ export function NoteDisplay({
 
               <TooltipContent>Excluir</TooltipContent>
             </Tooltip>
-            {/* <Separator orientation="vertical" className="mx-1 h-6" />
+            <Separator orientation="vertical" className="mx-1 h-6" />
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button onClick={onEdit} variant="ghost" size="icon">
                   <Edit className="h-4 w-4" />
                   <span className="sr-only">Editar</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Editar</TooltipContent>
-            </Tooltip> */}
+            </Tooltip>
           </div>
         )}
       </div>
