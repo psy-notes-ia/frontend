@@ -67,7 +67,7 @@ export default function NewNoteDrawer({ children, note, onSubmited }: any) {
               <Input
                 type="text"
                 id="title"
-                placeholder="Ex. Sarah Martins"
+                placeholder="Ex. Anotação semana 1"
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>

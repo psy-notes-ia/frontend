@@ -63,10 +63,10 @@ class NoteServiceClass {
     return response;
   }
 
-  async updateNote(body: any, id: string) {
+  async updateNote(note: any, id: string) {
     var response = await AppFetch(this.URL_BASE + "/"+id, {
       method: "PATCH",
-      body: JSON.stringify(body),
+      body: JSON.stringify({note}),
     });
     // const data = await response.json();
     return response;
@@ -74,6 +74,7 @@ class NoteServiceClass {
   async deleteNote(id: any) {
     var response = await AppFetch(this.URL_BASE + "/"+id, {
       method: "DELETE",
+      body:JSON.stringify({"message": ""}),
     });
     // const data = await response.json();
     return response;
