@@ -11,6 +11,8 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { DecryptData } from "@/utils/crypto";
 import Security from "@/utils/security";
+import Image from "next/image";
+import { noteIcon } from "@/assets";
 const security = new Security();
 interface MailListProps {
   items: any[];
@@ -23,6 +25,18 @@ export function AllNoteList({ items }: MailListProps) {
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-2 p-4 pt-0  mb-32">
         <h1 className="font-semibold text-xl pt-4">Ultimas anotações</h1>
+
+        {items.length == 0 ? (
+          <div className="flex flex-col justify-center items-center">
+            <Image src={noteIcon} alt="note" />
+            <h4 className="font-bold">Nenhuma anotação</h4>
+            <span className="text-foreground-400 font-light">
+              Comece a criar suas anotações
+            </span>
+          </div>
+        ) : (
+          ""
+        )}
         {items.map((item) => (
           <button
             key={item.id}

@@ -88,24 +88,29 @@ export function Nav({ isCollapsed, onSearchPacient, onClickItems }: NavProps) {
             signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL })
           }
         >
-          <div className="mb-2 cursor-pointer transition-colors hover:border-black bg-gray-100 flex items-center justify-between gap-2 border rounded-[8px] p-2">
-            <div className="avatar rounded-full min-h-8 min-w-8 bg-[#0b9de6] text-white font-[700] flex items-center justify-center">
-              <p>
-                {(
-                  session.data?.user?.name?.split("")[0] +
-                  session.data?.user?.name?.split("")[1]!
-                ).toUpperCase()}
-              </p>
+          <div className="mb-2 bg-gray-100 cursor-pointer transition-colors hover:border-black  border rounded-[8px]">
+            <div className="p-2  flex items-center justify-between gap-2">
+              <div className="avatar rounded-full min-h-8 min-w-8 bg-[#0b9de6] text-white font-[700] flex items-center justify-center">
+                <p>
+                  {(
+                    session.data?.user?.name?.split("")[0] +
+                    session.data?.user?.name?.split("")[1]!
+                  ).toUpperCase()}
+                </p>
+              </div>
+              <div className="grow">
+                <p className="text-[13px] font-bold">
+                  {session.data?.user?.name}
+                </p>
+                <p className="text-[10px] text-neutral-500">
+                  {session.data?.user?.email}
+                </p>
+              </div>
+              <ChevronDown className="text-[#d4d4d4]" />
             </div>
-            <div className="grow">
-              <p className="text-[13px] font-bold">
-                {session.data?.user?.name}
-              </p>
-              <p className="text-[10px] text-neutral-500">
-                {session.data?.user?.email}
-              </p>
+            <div className="rounded-b-[8px] bg-black/10 text-gray-600 font-semibold text-xs flex justify-center items-center m-auto">
+              {session.data?.user?.plan?.toLocaleUpperCase()}
             </div>
-            <ChevronDown className="text-[#d4d4d4]" />
           </div>
         </DropdownMenuComponent>
         <h1 className="pt-2 font-semibold text-xl">Pacientes</h1>

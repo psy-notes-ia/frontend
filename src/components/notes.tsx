@@ -43,7 +43,7 @@ import AnalyseService from "@/app/api/repository/AnalyseService";
 import { AllNoteList } from "./all-pacients";
 import { AnalyseDisplay } from "./analyse-display";
 import Image from "next/image";
-import { psypro } from "@/assets";
+import { psypro, psyproSvg } from "@/assets";
 
 interface MailProps {
   defaultLayout: number[] | undefined;
@@ -178,7 +178,7 @@ export function Notes({
               isCollapsed ? "h-[52px]" : "px-2"
             )}
           >
-            <Image src={psypro} className="w-1/2" alt="psypro"></Image>
+            <Image src={psyproSvg} className="w-1/2" alt="psypro"></Image>
           </div>
           <Separator />
           <Nav
@@ -276,7 +276,7 @@ export function Notes({
         </ResizablePanel>
         <ResizableHandle withHandle />
 
-        {/* {params.get("p") != "all" && ( */}
+        {/* {mail.selected != null && ( */}
         <ResizablePanel defaultSize={defaultLayout[2]}>
           {newNote ? (
             <NewNoteDisplay
@@ -293,7 +293,10 @@ export function Notes({
             <NoteDisplay
               deleteButton={params.get("p") != "all"}
               onNoteDeleted={loadNotesByPacient}
-              note={notes.find((item) => item.id === mail.selected) || lastNotes.find((item) => item.id === mail.selected)}
+              note={
+                notes.find((item) => item.id === mail.selected) ||
+                lastNotes.find((item) => item.id === mail.selected)
+              }
             />
           )}
         </ResizablePanel>
